@@ -1,0 +1,125 @@
+@import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  direction: rtl;
+}
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  font-family: 'Amiri', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto',
+    'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+ 
+}
+
+/* Fix Arabic text in PDF */
+.pdf-content {
+  font-family: 'Amiri', serif;
+}
+button{
+  border: none;
+}
+/* إخفاء شريط التمرير لمتصفحات WebKit (Chrome, Safari) */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* إخفاء شريط التمرير لـ Firefox */
+.scrollbar-hide {
+  scrollbar-width: none;
+}
+/* إخفاء الأسهم في متصفحات Webkit (Chrome, Safari) */
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* إخفاء الأسهم في Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+/* تحديد شكل اللودينج سبينر */
+.loader {
+  border: 4px solid rgba(255, 255, 255, 0.3); /* لون شفاف للحواف */
+  border-top: 4px solid white; /* لون الدوران الأساسي */
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  animation: spin 1s linear infinite;
+}
+
+/* تحريك اللودينج */
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+/* تخصيص react-select */
+.react-select-container {
+  width: 100% !important;
+  cursor: pointer !important;
+}
+
+.react-select__control {
+  background-color: hsl(210, 20%, 25%) !important; 
+  border: 1px solid hsl(210, 20%, 25%) !important; 
+  border-radius: 0.5rem !important; 
+  padding: 0.2rem !important; 
+  box-shadow: none !important;
+}
+
+.react-select__control--is-focused {
+  border: 2px solid hsl(210, 80%, 60%) !important; 
+  box-shadow: 0 0 0 2px hsla(210, 80%, 60%, 0.2) !important; 
+}
+
+.react-select__menu {
+  background-color: hsl(210, 20%, 15%) !important; 
+  border: 1px solid hsl(210, 20%, 25%) !important; 
+  border-radius: 0.5rem !important; 
+}
+
+.react-select__option {
+  padding: 8px 12px !important; 
+  color: hsl(210, 20%, 90%) !important;
+}
+
+.react-select__option--is-focused {
+  background-color: hsl(210, 20%, 25%) !important; 
+}
+
+.react-select__option--is-selected {
+  background-color: hsl(210, 80%, 60%) !important; 
+  color: hsl(210, 20%, 98%) !important;
+}
+
+.react-select__placeholder {
+  color: hsl(210, 20%, 50%) !important; 
+}
+
+.react-select__single-value {
+  color: hsl(210, 20%, 90%) !important; 
+}
+
+.react-select__indicator-separator {
+  background-color: hsl(210, 20%, 25%) !important; 
+}
+
+.react-select__dropdown-indicator {
+  color: hsl(210, 20%, 50%) !important; 
+}
+
+.react-select__dropdown-indicator:hover {
+  color: hsl(210, 20%, 90%) !important; 
+}
