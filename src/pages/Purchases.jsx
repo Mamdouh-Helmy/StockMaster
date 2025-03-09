@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { usePurchases } from "../context/PurchasesContext";
-import { useClientSupplier } from "../context/ClientSupplierContext"; // استيراد السياق
+import { useClientSupplier } from "../context/ClientSupplierContext";
 import { toast } from "sonner";
 import ProductForm from "../components/ProductForm";
 import SalesTable from "../components/SalesTable";
@@ -10,7 +10,7 @@ export default function Purchases() {
   const { purchases, addPurchase, deletePurchase, updatePurchase, loading } =
     usePurchases();
   const { clientsSuppliers, fetchClientsSuppliers } = useClientSupplier();
-  const { fetchInventory } = useInventory();
+  const { inventory, fetchInventory } = useInventory(); // جلب inventory
   const [editPurchase, setEditPurchase] = useState(null);
   const [products, setProducts] = useState([
     { productName: "", quantity: "", price: "" },
@@ -18,7 +18,8 @@ export default function Purchases() {
   const [supplierName, setSupplierName] = useState("");
 
   useEffect(() => {
-    fetchClientsSuppliers(); // جلب قائمة العملاء والموردين عند تحميل الصفحة
+    fetchClientsSuppliers();
+    fetchInventory(); // جلب المخزون عند تحميل الصفحة
   }, []);
 
   const handleAddProduct = () => {
@@ -62,7 +63,7 @@ export default function Purchases() {
         await addPurchase(purchaseData);
         toast.success("✅ تمت إضافة عملية الشراء بنجاح");
       }
-      fetchInventory()
+      fetchInventory();
       setProducts([{ productName: "", quantity: "", price: "" }]);
       setSupplierName("");
     } catch (error) {
@@ -86,6 +87,7 @@ export default function Purchases() {
 
       <ProductForm
         products={products}
+        inventory={inventory} // تمرير inventory إلى ProductForm
         handleProductChange={handleProductChange}
         handleAddProduct={handleAddProduct}
         handleRemoveProduct={handleRemoveProduct}
@@ -101,11 +103,12 @@ export default function Purchases() {
         editModeText1="تعديل عملية الشراء"
         editModeText2="إضافة عملية الشراء"
         textLebalInput="اسم المورد"
-        textSelcectbox2='أختر المورد'
+        textSelcectbox2="أختر المورد"
         textButton="إضافة عملية الشراء"
         isSalesPage={false}
         clientsSuppliers={clientsSuppliers}
         TextclientsSuppliers="supplier"
+        previousProducts={inventory}
       />
 
       {purchases && purchases.length > 0 && (

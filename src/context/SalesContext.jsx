@@ -12,7 +12,7 @@ export const SalesProvider = ({ children }) => {
   const [error, setError] = useState(null);
   const { isAuthenticated } = useAuth();
 
-  const API_URL = "https://smartstock-production.up.railway.app/api/sales";
+  const API_URL = "http://localhost:5000/api/sales";
 
   // جلب عمليات البيع من الخادم
   const fetchSales = async () => {
@@ -40,25 +40,30 @@ export const SalesProvider = ({ children }) => {
     try {
       const token = localStorage.getItem("token");
       if (!token) throw new Error("المستخدم غير مصرح له بإضافة عمليات البيع.");
-
+  
       const response = await axios.post(`${API_URL}/addSale`, saleData, {
         headers: { Authorization: `Bearer ${token}` },
       });
-
+  
       const newSale = response.data.sale;
       setSales((prevSales) => [...prevSales, newSale]);
-
+  
       await downloadInvoice(newSale._id);
       setLoading(false);
       return response.data;
     } catch (err) {
       console.error("حدث خطأ أثناء إرسال الطلب:", err.response || err.message);
-      setError("حدث خطأ أثناء إضافة عملية البيع");
+      
+      // التحقق من نوع الخطأ وعرض رسالة مناسبة
+      const errorMessage = err.response?.data?.message || "❌ حدث خطأ أثناء إضافة عملية البيع";
+      setError(errorMessage);
+      toast.error(errorMessage);
+  
       setLoading(false);
-      toast.error(err.response?.data?.message || "❌ حدث خطأ أثناء إضافة عملية البيع");
       throw err;
     }
   };
+  
 
   // تحميل الفاتورة
   const downloadInvoice = async (saleId) => {

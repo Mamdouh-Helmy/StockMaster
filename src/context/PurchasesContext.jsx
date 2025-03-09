@@ -12,7 +12,7 @@ export const PurchasesProvider = ({ children }) => {
   const [error, setError] = useState(null);
   const { isAuthenticated } = useAuth();
 
-  const API_URL = "https://smartstock-production.up.railway.app/api/purchases";
+  const API_URL = "http://localhost:5000/api/purchases";
 
   // جلب عمليات الشراء من الخادم
   const fetchPurchases = async () => {

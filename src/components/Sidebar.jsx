@@ -8,23 +8,25 @@ import {
   FaTruck,
   FaChartBar,
   FaSignOutAlt,
+  FaUser,
+  FaUserAlt,
 } from "react-icons/fa";
 import { useAuth } from "../context/AuthContext";
 import { useEffect, useState } from "react";
 
 function Sidebar({ isOpen, toggleSidebar }) {
   const location = useLocation();
-  const { logout } = useAuth();
+  const { logout, user } = useAuth(); // نفترض أن ملف المستخدم موجود في سياق المصادقة
   const [sidebarWidth, setSidebarWidth] = useState("16rem");
 
   useEffect(() => {
     const updateWidth = () => {
       if (window.innerWidth < 640) {
-        setSidebarWidth("10rem"); // للشاشات الصغيرة
+        setSidebarWidth("10rem");
       } else if (window.innerWidth < 1024) {
-        setSidebarWidth("12rem"); // للشاشات المتوسطة
+        setSidebarWidth("12rem");
       } else {
-        setSidebarWidth("16rem"); // للشاشات الكبيرة
+        setSidebarWidth("16rem");
       }
     };
 
@@ -40,25 +42,47 @@ function Sidebar({ isOpen, toggleSidebar }) {
     { path: "/inventory", icon: FaWarehouse, text: "المخزون" },
     { path: "/ClientSupplier", icon: FaTruck, text: "العملاء و الموردين" },
     { path: "/reports", icon: FaChartBar, text: "التقارير" },
+    { path: "/profile", icon: FaUser, text: "الملف الشخصي" },
   ];
 
   return (
     <motion.div
-      initial={{ width: 0 }} // يبدأ بعرض 0
-      animate={{ width: isOpen ? sidebarWidth : "0" }} // العرض يصبح 16rem أو 0 عند الإخفاء
-      transition={{ duration: 0.3, ease: "easeInOut" }} // تأثير سلس
-      className="fixed inset-y-0 left-0 z-10 bg-card text-card-foreground shadow-lg overflow-hidden min-h-screen md:relative"
+      initial={{ width: 0 }}
+      animate={{ width: isOpen ? sidebarWidth : "0" }}
+      transition={{ duration: 0.3, ease: "easeInOut" }}
+      className="sidebar fixed inset-y-0 left-0 z-10 bg-card text-card-foreground shadow-lg overflow-hidden min-h-screen md:relative"
     >
       <div className="p-4 border-b border-gray-700 text-center">
         <h1 className="text-[12px] md:text-base font-bold">نظام إدارة المخزون</h1>
       </div>
+
+      {/* قسم الملف الشخصي */}
+      <div className="p-4 border-b border-gray-700 flex flex-col items-center">
+        {user?.profileImage ? (
+          <img
+            src={user.profileImage}
+            alt="Profile"
+            className="w-10 h-10 rounded-full object-cover"
+          />
+        ) : (
+          <div className="w-10 h-10 flex items-center justify-center mb-2 bg-gray-700 rounded-full">
+            <FaUserAlt className="text-xl text-gray-400" />
+          </div>
+        )}
+        <h2 className="mt-2 text-base font-semibold text-white">
+          {user?.name || "اسم المستخدم"}
+        </h2>
+        {user?.phone && <p className="text-sm mt-2 text-gray-400">{user.phone}</p>}
+      </div>
+
       <nav className="mt-4">
         {menuItems.map(({ path, icon: Icon, text }) => (
           <Link
             key={path}
             to={path}
-            className={`flex items-center gap-3 px-6 py-3 transition-colors duration-200 hover:bg-gray-700 rounded-lg mb-1 ${location.pathname === path ? "bg-gray-700" : "text-gray-300"
-              }`}
+            className={`flex items-center gap-3 px-6 py-3 transition-colors duration-200 hover:bg-gray-700 rounded-lg mb-1 ${
+              location.pathname === path ? "bg-gray-700" : "text-gray-300"
+            }`}
           >
             <Icon className="w-3 h-3 md:w-5 md:h-5" />
             <span className="text-[14px] md:text-[16px]">{text}</span>
@@ -73,7 +97,6 @@ function Sidebar({ isOpen, toggleSidebar }) {
         </button>
       </nav>
 
-      {/* زر إغلاق الشريط الجانبي */}
       <button
         onClick={toggleSidebar}
         className="absolute top-4 right-4 text-white md:hidden"

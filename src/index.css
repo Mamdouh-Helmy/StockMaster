@@ -69,6 +69,7 @@ input[type=number] {
 .react-select-container {
   width: 100% !important;
   cursor: pointer !important;
+  color: white !important;
 }
 
 .react-select__control {
@@ -77,17 +78,20 @@ input[type=number] {
   border-radius: 0.5rem !important; 
   padding: 0.2rem !important; 
   box-shadow: none !important;
+  color: white !important;
 }
 
 .react-select__control--is-focused {
   border: 2px solid hsl(210, 80%, 60%) !important; 
   box-shadow: 0 0 0 2px hsla(210, 80%, 60%, 0.2) !important; 
+  color: white !important;
 }
 
 .react-select__menu {
   background-color: hsl(210, 20%, 15%) !important; 
   border: 1px solid hsl(210, 20%, 25%) !important; 
   border-radius: 0.5rem !important; 
+  color: white !important;
 }
 
 .react-select__option {
@@ -97,6 +101,7 @@ input[type=number] {
 
 .react-select__option--is-focused {
   background-color: hsl(210, 20%, 25%) !important; 
+  color: white !important;
 }
 
 .react-select__option--is-selected {
@@ -114,6 +119,7 @@ input[type=number] {
 
 .react-select__indicator-separator {
   background-color: hsl(210, 20%, 25%) !important; 
+  color: white !important;
 }
 
 .react-select__dropdown-indicator {
@@ -122,4 +128,79 @@ input[type=number] {
 
 .react-select__dropdown-indicator:hover {
   color: hsl(210, 20%, 90%) !important; 
+}
+
+.react-select__input {
+  color: white !important;
+}
+
+
+/* تصميم SweetAlert في الوضع الداكن */
+.custom-swal {
+  background: linear-gradient(145deg, #1f2328, #2b2e32) !important;
+  color: #f2f3f4 !important;
+  border-radius: 12px !important;
+  box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.3) !important;
+  padding: 20px !important;
+}
+
+/* عنوان التنبيه */
+.custom-swal .swal2-title {
+  font-size: 22px !important;
+  font-weight: bold !important;
+  color: #f8f9fa !important;
+}
+
+/* نص التنبيه */
+.custom-swal .swal2-content {
+  font-size: 16px !important;
+  color: #d1d5db !important;
+}
+
+/* زر تأكيد التحديث */
+.custom-swal .swal2-confirm.success-btn {
+  background: linear-gradient(145deg, #238636, #2ea44f) !important;
+  color: white !important;
+  border-radius: 8px !important;
+  padding: 12px 24px !important;
+  font-size: 16px !important;
+  font-weight: bold !important;
+  transition: all 0.3s ease-in-out !important;
+}
+
+.custom-swal .swal2-confirm.success-btn:hover {
+  background: linear-gradient(145deg, #2ea44f, #238636) !important;
+  transform: scale(1.05) !important;
+}
+
+/* زر تأكيد الحذف */
+.custom-swal .swal2-confirm.delete-btn {
+  background: linear-gradient(145deg, #d32f2f, #ff4c4c) !important;
+  color: white !important;
+  border-radius: 8px !important;
+  padding: 12px 24px !important;
+  font-size: 16px !important;
+  font-weight: bold !important;
+  transition: all 0.3s ease-in-out !important;
+}
+
+.custom-swal .swal2-confirm.delete-btn:hover {
+  background: linear-gradient(145deg, #ff4c4c, #d32f2f) !important;
+  transform: scale(1.05) !important;
+}
+
+/* أيقونة الحذف */
+.custom-swal .swal2-icon.delete-icon {
+  border-color: #ff4c4c !important;
+  color: #ff4c4c !important;
+}
+
+.small-title {
+  font-size: 33px !important; /* حجم النص الافتراضي */
+}
+
+@media (max-width: 768px) {
+  .small-title {
+      font-size: 19px !important; /* تصغير النص في الشاشات المتوسطة */
+  }
 }

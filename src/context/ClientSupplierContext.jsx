@@ -12,7 +12,7 @@ export const ClientSupplierProvider = ({ children }) => {
   const [error, setError] = useState(null);
   const { isAuthenticated } = useAuth();
 
-  const API_URL = "https://smartstock-production.up.railway.app/api/clients-suppliers";
+  const API_URL = "http://localhost:5000/api/clients-suppliers";
 
   // جلب جميع العملاء والموردين
   const fetchClientsSuppliers = async () => {
@@ -20,7 +20,6 @@ export const ClientSupplierProvider = ({ children }) => {
     setError(null);
     const token = localStorage.getItem("token");
     if (!token) return;
-
     try {
       const response = await axios.get(API_URL, {
         headers: { Authorization: `Bearer ${token}` },
@@ -39,7 +38,6 @@ export const ClientSupplierProvider = ({ children }) => {
     setError(null);
     const token = localStorage.getItem("token");
     if (!token) return;
-
     try {
       const response = await axios.post(`${API_URL}/addClientSupplier`, data, {
         headers: { Authorization: `Bearer ${token}` },
@@ -48,7 +46,9 @@ export const ClientSupplierProvider = ({ children }) => {
       toast.success("✅ تم إضافة العميل/المورد بنجاح");
     } catch (err) {
       setError(err.response?.data?.message || "حدث خطأ أثناء الإضافة");
-      toast.error(`❌ ${err.response?.data?.message || "حدث خطأ أثناء إضافة العميل/المورد"}`);
+      toast.error(
+        `❌ ${err.response?.data?.message || "حدث خطأ أثناء إضافة العميل/المورد"}`
+      );
     } finally {
       setLoading(false);
     }
@@ -60,7 +60,6 @@ export const ClientSupplierProvider = ({ children }) => {
     setError(null);
     const token = localStorage.getItem("token");
     if (!token) return;
-
     try {
       const response = await axios.put(`${API_URL}/${id}`, updatedData, {
         headers: { Authorization: `Bearer ${token}` },
@@ -82,7 +81,6 @@ export const ClientSupplierProvider = ({ children }) => {
     setError(null);
     const token = localStorage.getItem("token");
     if (!token) return;
-
     try {
       await axios.delete(`${API_URL}/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
@@ -99,27 +97,110 @@ export const ClientSupplierProvider = ({ children }) => {
   const payClientSupplier = async (id, amount) => {
     const token = localStorage.getItem("token");
     if (!token) return;
-
     try {
-      const response = await fetch(`${API_URL}/${id}/pay`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ amount }),
-      });
-
-      const data = await response.json();
-
-      if (response.ok) {
+      const response = await axios.post(
+        `${API_URL}/${id}/pay`,
+        { amount },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      if (response.status === 200) {
         toast.success("✅ تم تسجيل الدفع بنجاح!");
         fetchClientsSuppliers();
       } else {
-        toast.error(`❌ خطأ: ${data.message}`);
+        toast.error(`❌ خطأ: ${response.data.message}`);
       }
     } catch (error) {
       console.error("حدث خطأ:", error);
+    }
+  };
+
+  // إضافة ملاحظة جديدة للعميل/المورد
+  const addNoteToClientSupplier = async (supplierId, noteText) => {
+    setLoading(true);
+    setError(null);
+    const token = localStorage.getItem("token");
+    if (!token) return;
+    try {
+      const response = await axios.post(
+        `${API_URL}/addNote`,
+        { supplierId, noteText },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      // نفترض أن الـ API يُعيد الملاحظات المحدثة
+      setClientsSuppliers((prev) =>
+        prev.map((item) =>
+          item._id === supplierId ? { ...item, notes: response.data.notes } : item
+        )
+      );
+      toast.success("✅ تمت إضافة الملاحظة بنجاح");
+    } catch (err) {
+      setError(err.response?.data?.message || "حدث خطأ أثناء إضافة الملاحظة");
+      toast.error(
+        `❌ ${err.response?.data?.message || "حدث خطأ أثناء إضافة الملاحظة"}`
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // تعديل ملاحظة موجودة للعميل/المورد
+  const editNoteToClientSupplier = async (supplierId, noteId, noteText) => {
+    setLoading(true);
+    setError(null);
+    const token = localStorage.getItem("token");
+    if (!token) return;
+    try {
+      const response = await axios.put(
+        `${API_URL}/${supplierId}/notes/${noteId}`,
+        { noteText },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      setClientsSuppliers((prev) =>
+        prev.map((item) =>
+          item._id === supplierId
+            ? {
+              ...item,
+              notes: item.notes.map((note) =>
+                note._id === noteId ? response.data.note : note
+              ),
+            }
+            : item
+        )
+      );
+    } catch (err) {
+      setError(err.response?.data?.message || "حدث خطأ أثناء تعديل الملاحظة");
+      toast.error(
+        `❌ ${err.response?.data?.message || "حدث خطأ أثناء تعديل الملاحظة"}`
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // حذف ملاحظة موجودة للعميل/المورد
+  const deleteNoteFromClientSupplier = async (supplierId, noteId) => {
+    setLoading(true);
+    setError(null);
+    const token = localStorage.getItem("token");
+    if (!token) return;
+    try {
+      await axios.delete(`${API_URL}/${supplierId}/notes/${noteId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setClientsSuppliers((prev) =>
+        prev.map((item) =>
+          item._id === supplierId
+            ? { ...item, notes: item.notes.filter((note) => note._id !== noteId) }
+            : item
+        )
+      );
+    } catch (err) {
+      setError(err.response?.data?.message || "حدث خطأ أثناء حذف الملاحظة");
+      toast.error(
+        `❌ ${err.response?.data?.message || "حدث خطأ أثناء حذف الملاحظة"}`
+      );
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -138,6 +219,9 @@ export const ClientSupplierProvider = ({ children }) => {
         loading,
         error,
         payClientSupplier,
+        addNoteToClientSupplier,
+        editNoteToClientSupplier,
+        deleteNoteFromClientSupplier,
       }}
     >
       {children}

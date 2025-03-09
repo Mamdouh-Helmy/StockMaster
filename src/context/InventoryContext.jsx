@@ -2,17 +2,20 @@ import { createContext, useContext, useState, useEffect } from "react";
 import axios from "axios";
 import { toast } from "sonner";
 import { useAuth } from "./AuthContext";
+import { usePurchases } from "./PurchasesContext";
 
 const InventoryContext = createContext();
 export const useInventory = () => useContext(InventoryContext);
 
 export const InventoryProvider = ({ children }) => {
+  const { fetchPurchases } =
+      usePurchases();
   const [inventory, setInventory] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const { isAuthenticated } = useAuth();
 
-  const API_URL = "https://smartstock-production.up.railway.app/api/inventory";
+  const API_URL = "http://localhost:5000/api/inventory";
 
     // جلب جميع المنتجات في المخزون
     const fetchInventory = async () => {
@@ -82,6 +85,7 @@ export const InventoryProvider = ({ children }) => {
         setInventory((prevInventory) =>
           prevInventory.map((item) => (item._id === id ? response.data.product : item))
         );
+        fetchPurchases()
         toast.success("✅ تم تحديث المنتج بنجاح");
       } catch (err) {
         toast.error("❌ حدث خطأ أثناء تحديث المنتج");

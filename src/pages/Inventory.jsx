@@ -80,6 +80,7 @@ export default function Inventory() {
         editModeText1="تعديل المنتج"
         editModeText2="إضافة منتج جديد للمخزون"
         textButton="إضافة منتج"
+        productNameOptions={inventory}
       />
 
       {inventory && inventory.length > 0 && (
