@@ -12,7 +12,7 @@ export const SalesProvider = ({ children }) => {
   const [error, setError] = useState(null);
   const { isAuthenticated } = useAuth();
 
-  const API_URL = "http://localhost:5000/api/sales";
+  const API_URL = "https://smartstock-production.up.railway.app/api/sales";
 
   // جلب عمليات البيع من الخادم
   const fetchSales = async () => {
@@ -72,7 +72,7 @@ export const SalesProvider = ({ children }) => {
       if (!token) throw new Error("المستخدم غير مصرح له بتحميل الفاتورة.");
 
       const response = await axios.get(
-        `http://localhost:5000/api/invoices/generateInvoice/${saleId}`,
+        `https://smartstock-production.up.railway.app/api/invoices/generateInvoice/${saleId}`,
         {
           headers: { Authorization: `Bearer ${token}` },
           responseType: "blob",

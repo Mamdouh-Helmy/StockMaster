@@ -15,7 +15,7 @@ export const InventoryProvider = ({ children }) => {
   const [error, setError] = useState(null);
   const { isAuthenticated } = useAuth();
 
-  const API_URL = "http://localhost:5000/api/inventory";
+  const API_URL = "https://smartstock-production.up.railway.app/api/inventory";
 
     // جلب جميع المنتجات في المخزون
     const fetchInventory = async () => {

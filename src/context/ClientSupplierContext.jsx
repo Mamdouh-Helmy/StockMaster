@@ -12,7 +12,7 @@ export const ClientSupplierProvider = ({ children }) => {
   const [error, setError] = useState(null);
   const { isAuthenticated } = useAuth();
 
-  const API_URL = "http://localhost:5000/api/clients-suppliers";
+  const API_URL = "https://smartstock-production.up.railway.app/api/clients-suppliers";
 
   // جلب جميع العملاء والموردين
   const fetchClientsSuppliers = async () => {

@@ -34,7 +34,7 @@ export const AuthProvider = ({ children }) => {
   const login = async (username, password) => {
     setLoading(true);
     try {
-      const response = await fetch("http://localhost:5000/api/auth/login", {
+      const response = await fetch("https://smartstock-production.up.railway.app/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, password }),
@@ -85,7 +85,7 @@ export const AuthProvider = ({ children }) => {
   const fetchProfile = async () => {
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch("http://localhost:5000/api/auth/profile", {
+      const response = await fetch("https://smartstock-production.up.railway.app/api/auth/profile", {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -116,9 +116,10 @@ export const AuthProvider = ({ children }) => {
 
   // دالة لتحديث بيانات الملف الشخصي (الحقول اختيارية)
   const updateProfile = async (profileData) => {
+    setLoading(true);
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch("http://localhost:5000/api/auth/profile", {
+      const response = await fetch("https://smartstock-production.up.railway.app/api/auth/profile", {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -144,6 +145,8 @@ export const AuthProvider = ({ children }) => {
     } catch (error) {
       console.error("Update profile error:", error.message);
       throw error;
+    }finally{
+      setLoading(false);
     }
   };
 
@@ -151,7 +154,7 @@ export const AuthProvider = ({ children }) => {
   const fetchPublicProfileNoUsername = async () => {
     try {
       const response = await fetch(
-        "http://localhost:5000/api/auth/public-profile-no-username"
+        "https://smartstock-production.up.railway.app/api/auth/public-profile-no-username"
       );
       if (!response.ok) {
         const errorData = await response.json();

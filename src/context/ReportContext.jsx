@@ -21,7 +21,7 @@ export const ReportProvider = ({ children }) => {
 
   const [loading, setLoading] = useState(false);
   const [year, setYear] = useState(new Date().getFullYear()); 
-  const API_URL = "http://localhost:5000/api/reports";
+  const API_URL = "https://smartstock-production.up.railway.app/api/reports";
 
   const fetchData = async (endpoint, key, includeYear = false) => {
     const token = localStorage.getItem("token");
